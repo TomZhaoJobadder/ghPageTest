@@ -34,7 +34,7 @@ jobs:
       - name: Upload scales-doc-site
         uses: actions/upload-artifact@v2
         with:
-          name: site
+          name: doc-site
           path: githubPagesTest/dist/github-pages-test
 
   # create-page-host:
