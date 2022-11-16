@@ -9,7 +9,7 @@ on:
       - 'DS**'
 
 env:
-  PR_REPO_NAME: sc-preview-${{ github.event.pull_request.node_id }}
+  PR_REPO_NAME: sc-preview-${{ github.event.pull_request.head.ref }}
 
 jobs:
   Build-deploy-sc-doc-site:
@@ -25,7 +25,7 @@ jobs:
       - run: | 
           cd githubPagesTest
           yarn install
-      - name: Copy Assets
+      - name: build release
         # run: |
         #   yarn build:doc --base-href "/${{ env.PR_REPO_NAME }}/"
         run: |
@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: site
-          path: dist/github-pages-test
+          path: githubPagesTest/dist/github-pages-test
 
   # create-page-host:
   #   runs-on: ubuntu-latest
@@ -43,7 +43,7 @@ jobs:
       - name: Create new repository for temporary deployment
         uses: octobay/create-repository-action@v1
         with:
-          name: ${{ env.PR_REPO_NAME }}
+          name: TomZhaoJobadder/${{ env.PR_REPO_NAME }}
           # org: jobadder
           access-token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -65,7 +65,7 @@ jobs:
       - name: Checkout temporary deployment target repo
         uses: actions/checkout@v2
         with:
-          repository: ${{ env.PR_REPO_NAME }}
+          repository: TomZhaoJobadder/${{ env.PR_REPO_NAME }}
           path: 'pr-deploy'
           token: ${{ secrets.GITHUB_TOKEN }}
 
