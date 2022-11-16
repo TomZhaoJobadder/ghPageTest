@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Application Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
@@ -63,7 +63,7 @@ jobs:
 
 
       - name: Checkout temporary deployment target repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: TomZhaoJobadder/${{ env.PR_REPO_NAME }}
           path: 'pr-deploy'
