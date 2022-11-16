@@ -3,13 +3,12 @@ name: Pull Request Build and Deploy
 on:
   workflow_dispatch:
   pull_request:
-    branches:
-      - dev
+    branches:   
       - main
-      - 'DS**'
+     
 
 env:
-  PR_REPO_NAME: sc-preview-${{ github.event.pull_request.node_id }}
+  PR_REPO_NAME: sc-preview-${{ github.event.pull_request.head.ref }}
 
 jobs:
   Build-deploy-sc-doc-site:
@@ -17,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Application Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
@@ -25,17 +24,17 @@ jobs:
       - run: | 
           cd githubPagesTest
           yarn install
-      - name: Copy Assets
+      - name: build release
         # run: |
         #   yarn build:doc --base-href "/${{ env.PR_REPO_NAME }}/"
         run: |
           cd githubPagesTest
-          yarn build
+          yarn build --base-href "/${{ env.PR_REPO_NAME }}/"
       - name: Upload scales-doc-site
         uses: actions/upload-artifact@v2
         with:
-          name: site
-          path: dist/github-pages-test
+          name: doc-site
+          path: githubPagesTest/dist/github-pages-test
 
   # create-page-host:
   #   runs-on: ubuntu-latest
@@ -45,7 +44,7 @@ jobs:
         with:
           name: ${{ env.PR_REPO_NAME }}
           # org: jobadder
-          access-token: ${{ secrets.GITHUB_TOKEN }}
+          access-token: ${{ secrets.PAT }}
 
   # pr-build-deploy:
   #   needs: [BuildS-sc-doc-site, create-page-host]
@@ -63,11 +62,11 @@ jobs:
 
 
       - name: Checkout temporary deployment target repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
-          repository: ${{ env.PR_REPO_NAME }}
+          repository: TomZhaoJobadder/${{ env.PR_REPO_NAME }}
           path: 'pr-deploy'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
 
       - name: Download sc site Artifacts
         uses: actions/download-artifact@v2
@@ -75,12 +74,23 @@ jobs:
           name: doc-site
           path: pr-build/dist
 
-      - name: Push files to target
-        run: |
-          cp -r pr-build/dist/* pr-deploy
-          cd pr-deploy
-          touch .nojekyll
-          git add .
-          git commit -m $GITHUB_SHA
-          git branch -M gh-pages
-          git push -u origin gh-pages
+      # - name: Push files to target
+      #   run: |
+      #     cp -r pr-build/dist/* pr-deploy
+      #     cd pr-deploy
+      #     touch .nojekyll
+      #     git add .
+      #     git commit -m $GITHUB_SHA
+      #     git branch -M gh-pages
+      #     git push -u origin gh-pages
+
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          repo: TomZhaoJobadder/${{ env.PR_REPO_NAME }}
+          target_branch: gh-pages
+          build_dir: pr-build/dist
+        env:
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PAT: ${{ secrets.PAT }}
