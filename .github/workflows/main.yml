@@ -30,7 +30,7 @@ jobs:
         #   yarn build:doc --base-href "/${{ env.PR_REPO_NAME }}/"
         run: |
           cd githubPagesTest
-          yarn build
+          yarn build --base-href "/${{ env.PR_REPO_NAME }}/"
       - name: Upload scales-doc-site
         uses: actions/upload-artifact@v2
         with:
