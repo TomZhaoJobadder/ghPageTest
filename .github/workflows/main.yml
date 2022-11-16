@@ -8,7 +8,8 @@ on:
      
 
 env:
-  PR_REPO_NAME: sc-preview-${{ github.event.pull_request.head.ref }}
+  PR_REPO_NAME: scp-${{ github.event.pull_request.head.ref }}
+  ORG_NAME: TomZhaoJobadder
 
 jobs:
   Build-deploy-sc-doc-site:
@@ -64,7 +65,7 @@ jobs:
       - name: Checkout temporary deployment target repo
         uses: actions/checkout@v3
         with:
-          repository: TomZhaoJobadder/${{ env.PR_REPO_NAME }}
+          repository: ${{ env.ORG_NAME }}/${{ env.PR_REPO_NAME }}
           path: 'pr-deploy'
           token: ${{ secrets.PAT }}
 
@@ -88,7 +89,7 @@ jobs:
         if: success()
         uses: crazy-max/ghaction-github-pages@v3
         with:
-          repo: TomZhaoJobadder/${{ env.PR_REPO_NAME }}
+          repo: ${{ env.ORG_NAME }}/${{ env.PR_REPO_NAME }}
           target_branch: gh-pages
           build_dir: pr-build/dist
         env:
