@@ -75,12 +75,23 @@ jobs:
           name: doc-site
           path: pr-build/dist
 
-      - name: Push files to target
-        run: |
-          cp -r pr-build/dist/* pr-deploy
-          cd pr-deploy
-          touch .nojekyll
-          git add .
-          git commit -m $GITHUB_SHA
-          git branch -M gh-pages
-          git push -u origin gh-pages
+      # - name: Push files to target
+      #   run: |
+      #     cp -r pr-build/dist/* pr-deploy
+      #     cd pr-deploy
+      #     touch .nojekyll
+      #     git add .
+      #     git commit -m $GITHUB_SHA
+      #     git branch -M gh-pages
+      #     git push -u origin gh-pages
+
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          repo: TomZhaoJobadder/${{ env.PR_REPO_NAME }}
+          target_branch: gh-pages
+          build_dir: pr-build/dist
+        env:
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PAT: ${{ secrets.PAT }}
