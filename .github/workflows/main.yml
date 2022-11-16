@@ -45,7 +45,7 @@ jobs:
         with:
           name: TomZhaoJobadder/${{ env.PR_REPO_NAME }}
           # org: jobadder
-          access-token: ${{ secrets.GITHUB_TOKEN }}
+          access-token: ${{ secrets.PAT }}
 
   # pr-build-deploy:
   #   needs: [BuildS-sc-doc-site, create-page-host]
@@ -67,7 +67,7 @@ jobs:
         with:
           repository: TomZhaoJobadder/${{ env.PR_REPO_NAME }}
           path: 'pr-deploy'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
 
       - name: Download sc site Artifacts
         uses: actions/download-artifact@v2
