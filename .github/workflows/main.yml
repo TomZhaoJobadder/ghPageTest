@@ -43,7 +43,7 @@ jobs:
       - name: Create new repository for temporary deployment
         uses: octobay/create-repository-action@v1
         with:
-          name: TomZhaoJobadder/${{ env.PR_REPO_NAME }}
+          name: ${{ env.PR_REPO_NAME }}
           # org: jobadder
           access-token: ${{ secrets.PAT }}
 
