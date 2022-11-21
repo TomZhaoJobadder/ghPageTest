@@ -1,10 +1,10 @@
 name: Publish release
+
 on:  
   workflow_dispatch:
   pull_request:
     branches: [ main ]
     types: [ closed ]
-
 env: 
   LOG_PATH: '.\projects\scripts\site\docs'
 
