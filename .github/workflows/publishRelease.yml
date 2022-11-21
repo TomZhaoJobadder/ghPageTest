@@ -1,0 +1,36 @@
+name: Publish release
+on:  
+  pull_request:
+    branches: [ main ]
+    types: [ closed ]
+
+env:
+  VERSION_NUMBER: 1.0
+  RELEASE_NOTES:  ''
+  PATH: '.\projects\scripts\site\docs'
+
+jobs:
+  merge_job:
+    # this job will only run if the PR has been merged
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Application Repo
+        uses: actions/checkout@v3
+
+      - name: Get release version number
+      - run: |
+         cd ${{ PATH }}
+         sed -n '/##/ ,/##/p; /##/q' changelog.en-US.md | sed 's/##/ /' >> $VERSION_NUMBER
+
+      - name: Get release notes 
+      - run: |
+         perl -0ne 'print $1 if /##(.*?)##/sg' changelog.en-US.md >> $RELEASE_NOTES
+
+      - name: create release  
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "release.tar.gz,foo/*.txt"
+          bodyFile: "body.md"
+          tag: ${{ VERSION_NUMBER }}
+          body: ${{ RELEASE_NOTES }}
