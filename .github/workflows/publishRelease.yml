@@ -20,12 +20,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Get release version number
-      - run: |
+        run: |
          cd ${{ PATH }}
          sed -n '/##/ ,/##/p; /##/q' changelog.en-US.md | sed 's/##/ /' >> $VERSION_NUMBER
 
       - name: Get release notes 
-      - run: |
+        run: |
          perl -0ne 'print $1 if /##(.*?)##/sg' changelog.en-US.md >> $RELEASE_NOTES
 
       - name: create release  
