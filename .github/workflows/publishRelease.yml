@@ -1,5 +1,6 @@
 name: Publish release
 on:  
+  workflow_dispatch:
   pull_request:
     branches: [ main ]
     types: [ closed ]
@@ -29,8 +30,6 @@ jobs:
 
       - name: create release  
         uses: ncipollo/release-action@v1
-        with:
-          artifacts: "release.tar.gz,foo/*.txt"
-          bodyFile: "body.md"
+        with:        
           tag: ${{ VERSION_NUMBER }}
           body: ${{ RELEASE_NOTES }}
