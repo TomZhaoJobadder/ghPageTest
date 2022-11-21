@@ -6,7 +6,7 @@ on:
     types: [ closed ]
 
 env: 
-  PATH: '.\projects\scripts\site\docs'
+  LOG_PATH: '.\projects\scripts\site\docs'
 
 jobs:
   merge_job:
@@ -20,7 +20,7 @@ jobs:
       - name: Get release version number
         id: ver_num
         run: |
-         cd ${{ env.PATH }}
+         cd ${{ env.LOG_PATH }}
          sed -n '/##/ ,/##/p; /##/q' changelog.en-US.md | sed 's/##/ /' >> $VERSION_NUMBER
 
       - name: Get release notes 
