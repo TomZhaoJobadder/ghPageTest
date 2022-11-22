@@ -19,13 +19,12 @@ jobs:
       - name: Get release notes 
         id: release_notes
         run: |
+         cd ${{ env.LOG_PATH }}
          (perl -0ne 'print $1 if /##(.*?)##/sg' changelog.en-US.md) >> $RELEASE_NOTES
-
+         
       - name: Get release version number
         id: ver_num
-        run: |
-         cd ${{ env.LOG_PATH }}
-        #  sed -n "/##/ ,/##/p; /##/q" changelog.en-US.md | sed "s/##/ /" >> $VERSION_NUMBER
+        run: |      
          sed -n "/##/ ,/##/p; /##/q" changelog.en-US.md  >> $VERSION_NUMBER
 
       - name: create release  
