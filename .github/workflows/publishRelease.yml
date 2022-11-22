@@ -20,8 +20,8 @@ jobs:
         id: release_notes
         run: |
          cd ${{ env.LOG_PATH }}
-         (perl -0ne 'print $1 if /##(.*?)##/sg' changelog.en-US.md) >> $RELEASE_NOTES
-         
+         (perl -0ne "print $1 if /##(.*?)##/sg" changelog.en-US.md) >> $RELEASE_NOTES
+
       - name: Get release version number
         id: ver_num
         run: |      
