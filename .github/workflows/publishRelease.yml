@@ -27,7 +27,7 @@ jobs:
       - name: Get release version number
         id: ver_num
         run: |      
-         sed -n '/##/ ,/##/p; /##/q' changelog.en-US.md | sed 's/##/ /'' >> "$env.VERSION_NUMBER"
+         sed -n '/##/ ,/##/p; /##/q' changelog.en-US.md | sed 's/##/ /' >> "$env.VERSION_NUMBER"
 
       - name: create release  
         uses: ncipollo/release-action@v1
