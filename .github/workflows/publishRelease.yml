@@ -20,12 +20,12 @@ jobs:
         id: ver_num
         run: |
          cd ${{ env.LOG_PATH }}
-         sed -n '/##/ ,/##/p; /##/q' changelog.en-US.md | sed 's/##/ /' >> $VERSION_NUMBER
+         (sed -n '/##/ ,/##/p; /##/q' changelog.en-US.md | sed 's/##/ /') >> $VERSION_NUMBER
 
       - name: Get release notes 
         id: release_notes
         run: |
-         perl -0ne 'print $1 if /##(.*?)##/sg' changelog.en-US.md >> $RELEASE_NOTES
+         (perl -0ne 'print $1 if /##(.*?)##/sg' changelog.en-US.md) >> $RELEASE_NOTES
 
       - name: create release  
         uses: ncipollo/release-action@v1
