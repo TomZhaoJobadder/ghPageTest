@@ -26,11 +26,12 @@ jobs:
 
       - name: Get release version number
         id: ver_num
-        run: |      
+        run: |  
+         cd ${{ env.LOG_PATH }}    
          sed -n '/##/ ,/##/p; /##/q' changelog.en-US.md | sed 's/##/ /' >> "$env.VERSION_NUMBER"
 
       - name: create release  
         uses: ncipollo/release-action@v1
         with:        
-          tag: ${{ steps.ver_num.outputs.VERSION_NUMBER }}
-          body: ${{ steps.release_notes.outputs.RELEASE_NOTES }}
+          tag: ${{ env.VERSION_NUMBER }}
+          body: ${{ env.RELEASE_NOTES }}
