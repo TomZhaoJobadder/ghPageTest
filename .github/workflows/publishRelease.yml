@@ -22,17 +22,13 @@ jobs:
         id: release_notes
         run: |
          cd ${{ env.LOG_PATH }}
-         echo 'RELEASE_NOTES<<EOF' >> $GITHUB_ENV
-         perl -0ne 'print $1 if /##(.*?)##/sg' changelog.en-US.md >> $GITHUB_ENV
-         echo 'EOF' >> $GITHUB_ENV
+         (perl -0ne 'print $1 if /##(.*?)##/sg' changelog.en-US.md) >> "$env.RELEASE_NOTES"
 
       - name: Get release version number
         id: ver_num
         run: |  
          cd ${{ env.LOG_PATH }}    
-         echo 'VERSION_NUMBER<<EOF' >> $GITHUB_ENV
-         sed -n '/##/ ,/##/p; /##/q' changelog.en-US.md | sed 's/##/ /' >>  $GITHUB_ENV
-         echo 'EOF' >> $GITHUB_ENV
+         sed -n '/##/ ,/##/p; /##/q' changelog.en-US.md | sed 's/##/ /' >> "$env.VERSION_NUMBER"
 
       - name: create release  
         uses: ncipollo/release-action@v1
